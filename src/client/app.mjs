@@ -1,4 +1,5 @@
 import { render, E } from './dom.mjs'
+import { Form, Input } from './components.mjs'
 
 const socket = io()
 
@@ -17,16 +18,10 @@ function renderAll(users = [], { task, answered = {}, answers = {} } = {}) {
   const $cards = document.getElementById('cards')
 
   render($task, [
-    E(
-      'form',
-      {
-        onSubmit: e => {
-          e.preventDefault()
-          socket.emit('task', { task: document.getElementById('task-input').value })
-        },
-      },
+    Form(
+      { onSubmit: _ => socket.emit('task', { task: document.getElementById('task-input').value }) },
       [
-        E('input', {
+        Input({
           autofocus: true,
           id: 'task-input',
           value: task,
