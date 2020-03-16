@@ -8,15 +8,21 @@ body > *:not(:first-child) {
 }
 
 #cards .card {
-  border-radius: 3px;
-  border: 1px solid #ccc;
-  padding: 24px;
+  background: rgb(30, 115, 165);
+  color: #eee;
+  font-size: 24px;
+  border-radius: 6px;
+  width: 65px;
+  border: 2px solid rgb(6, 78, 119);
+  padding: 24px 0;
   margin: 4px;
 }
 
 html,
 body,
-input {
+input,
+button {
+  font-size: 18px;
   font-family: 'Fantasque Sans Mono', Menlo, Monaco, 'Ubuntu Mono', Consolas, monospace;
   background: #efe;
 }
@@ -38,9 +44,20 @@ input:focus {
 }
 
 .user > * {
+  display: flex;
+  align-items: center;
+  margin: 2px;
   padding: 4px;
-  width: 30%;
-  max-width: 200px;
+}
+
+.user > *:first-child {
+  width: 20%;
+  max-width: 150px;
+  min-width: 100px;
+}
+
+.user .estimate {
+  border-radius: 3px;
 }
 
 .user .estimate.ready {
@@ -50,4 +67,10 @@ input:focus {
 .user .estimate.waiting {
   color: #eee;
   background: rgb(8, 104, 160);
+}
+
+button {
+  border: 1px solid #ccc;
+  background: #eee;
+  border-radius: 3px;
 }

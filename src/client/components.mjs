@@ -19,3 +19,5 @@ export const Input = ({ autofocus, id, value, placeholder }) =>
     value,
     placeholder,
   })
+
+export const Button = ({ text, onClick, disabled }) => E('button', { text, onClick, disabled })

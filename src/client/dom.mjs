@@ -5,7 +5,18 @@ function render(parent, children) {
 
 function createElement(
   name,
-  { id, class: className, text, placeholder, autofocus, onChange, onSubmit, onClick, value } = {},
+  {
+    id,
+    class: className,
+    disabled,
+    text,
+    placeholder,
+    autofocus,
+    onChange,
+    onSubmit,
+    onClick,
+    value,
+  } = {},
   children
 ) {
   const el = document.createElement(name)
@@ -13,6 +24,7 @@ function createElement(
   id && (el.id = id)
   value && (el.value = value)
   el.autofocus = autofocus
+  el.disabled = disabled
   onClick && el.addEventListener('click', onClick)
   onSubmit && el.addEventListener('submit', onSubmit)
   onChange && el.addEventListener('input', onChange)

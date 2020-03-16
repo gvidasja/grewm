@@ -1,5 +1,5 @@
 import { render, E } from './dom.mjs'
-import { Form, Input } from './components.mjs'
+import { Form, Input, Button } from './components.mjs'
 
 const socket = io()
 
@@ -12,23 +12,28 @@ socket.on('session', newSession => renderAll(users, (session = newSession)))
 
 const cards = [0, 0.5, 1, 2, 3, 5, 8, 13, 20, 40, 100, 'INF', '?'].map(String)
 
+function updateTask(task) {
+  socket.emit('task', { task })
+}
+
 function renderAll(users = [], { task, answered = {}, answers = {} } = {}) {
   const $task = document.getElementById('task')
   const $users = document.getElementById('users')
   const $cards = document.getElementById('cards')
 
   render($task, [
-    Form(
-      { onSubmit: _ => socket.emit('task', { task: document.getElementById('task-input').value }) },
-      [
-        Input({
-          autofocus: true,
-          id: 'task-input',
-          value: task,
-          placeholder: 'Enter task...',
-        }),
-      ]
-    ),
+    Form({ onSubmit: _ => updateTask(document.getElementById('task-input').value) }, [
+      Input({
+        autofocus: true,
+        id: 'task-input',
+        value: task,
+        placeholder: 'Enter task...',
+      }),
+    ]),
+    Button({
+      text: 'Reset',
+      onClick: () => updateTask(),
+    }),
   ])
 
   render(
@@ -41,7 +46,7 @@ function renderAll(users = [], { task, answered = {}, answers = {} } = {}) {
           text: answers[user.id] || (answered[user.id] ? 'READY' : 'WAITING'),
         }),
         user.id === socket.id
-          ? E('button', {
+          ? Button({
               text: 'Change name',
               onClick: () => register(true),
             })
@@ -53,7 +58,7 @@ function renderAll(users = [], { task, answered = {}, answers = {} } = {}) {
   render(
     $cards,
     cards.map(card =>
-      E('div', {
+      E('button', {
         class: 'card',
         text: card,
         onClick: e => socket.emit('estimate', { estimate: card }),

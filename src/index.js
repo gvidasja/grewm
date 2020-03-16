@@ -33,6 +33,7 @@ io.on('connection', socket => {
   socket.on('task', ({ task }) => updateSession({ task }))
   socket.on('estimate', ({ estimate }) =>
     updateSession({
+      ...session,
       answers: { ...session.answers, [socket.id]: estimate },
       answered: { ...session.answered, [socket.id]: true },
     })
