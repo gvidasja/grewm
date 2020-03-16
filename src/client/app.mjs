@@ -2,10 +2,7 @@ import { render, E } from './dom.mjs'
 
 const socket = io()
 
-const name = localStorage.getItem('name') || prompt('Enter name') || ''
-name && localStorage.setItem('name', name)
-
-socket.emit('join', { name })
+register()
 
 let users, session
 
@@ -48,6 +45,12 @@ function renderAll(users = [], { task, answered = {}, answers = {} } = {}) {
           class: ['estimate', answered[user.id] ? 'ready' : 'waiting'],
           text: answers[user.id] || (answered[user.id] ? 'READY' : 'WAITING'),
         }),
+        user.id === socket.id
+          ? E('button', {
+              text: 'Change name',
+              onClick: () => register(true),
+            })
+          : '',
       ])
     )
   )
@@ -66,4 +69,12 @@ function renderAll(users = [], { task, answered = {}, answers = {} } = {}) {
 
 function userText(user) {
   return (user.master ? '[M] ' : '') + user.name
+}
+
+function register(force) {
+  const name = force
+    ? prompt('Enter name') || ''
+    : localStorage.getItem('name') || prompt('Enter name') || ''
+  name && localStorage.setItem('name', name)
+  socket.emit('join', { name })
 }

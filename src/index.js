@@ -22,7 +22,7 @@ app
 
 io.on('connection', socket => {
   socket.on('join', ({ name }) => {
-    updateUsers([...users, { id: socket.id, name }])
+    updateUsers([...users.filter(user => user.id !== socket.id), { id: socket.id, name }])
     updateSession(session)
   })
   socket.on('disconnect', () => updateUsers(users.filter(x => x.id !== socket.id)))
