@@ -4,6 +4,7 @@ body > *:not(:first-child) {
 
 #cards {
   display: flex;
+  flex-wrap: wrap;
 }
 
 #cards .card {
@@ -38,7 +39,8 @@ input:focus {
 
 .user > * {
   padding: 4px;
-  width: 10vw;
+  width: 30%;
+  max-width: 200px;
 }
 
 .user .estimate.ready {
