@@ -1,0 +1,29 @@
+name: buildx
+
+on:
+  push:
+    branches: master
+
+jobs:
+  buildx:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+      - name: Set up Docker Buildx
+        id: buildx
+        uses: crazy-max/ghaction-docker-buildx@v1
+        with:
+          version: latest
+      - name: Available platforms
+        run: echo ${{ steps.buildx.outputs.platforms }}
+      - name: Run Buildx
+        run: |
+          docker login -u gvidelio -p ${{ secrets.DOCKER_PASSWORD }} && \
+          docker buildx build \
+            --cache-from gvidelio/grewm:latest \
+            --platform linux/arm/v7 \
+            --tag "gvidelio/grewm:latest" \
+            --push \
+            --file ./arm32v7.Dockerfile . && \
+          docker logout
