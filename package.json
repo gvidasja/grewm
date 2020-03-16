@@ -1,0 +1,12 @@
+{
+  "dependencies": {
+    "express": "^4.17.1",
+    "socket.io": "^2.3.0"
+  },
+  "devDependencies": {
+    "node-dev": "^4.0.0"
+  },
+  "scripts": {
+    "start": "node-dev --respawn --no-notify src"
+  }
+}

@@ -1,0 +1,51 @@
+body > *:not(:first-child) {
+  margin-top: 24px;
+}
+
+#cards {
+  display: flex;
+}
+
+#cards .card {
+  border-radius: 3px;
+  border: 1px solid #ccc;
+  padding: 24px;
+  margin: 4px;
+}
+
+html,
+body,
+input {
+  font-family: 'Fantasque Sans Mono', Menlo, Monaco, 'Ubuntu Mono', Consolas, monospace;
+  background: #efe;
+}
+
+input {
+  border-radius: 3px;
+  border: none;
+  padding: 6px;
+  outline: none;
+}
+
+input:focus {
+  border-bottom: 1px solid #ccc;
+}
+
+.user {
+  display: flex;
+  margin: 4px 0;
+}
+
+.user > * {
+  padding: 4px;
+  width: 10vw;
+}
+
+.user .estimate.ready {
+  background: rgb(148, 223, 51);
+}
+
+.user .estimate.waiting {
+  color: #eee;
+  background: rgb(8, 104, 160);
+}
