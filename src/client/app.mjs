@@ -61,6 +61,7 @@ function renderAll(users = [], { task, answered = {}, answers = {} } = {}) {
       E('button', {
         class: 'card',
         text: card,
+        disabled: users.every(user => session && session.answered[user.id]),
         onClick: e => socket.emit('estimate', { estimate: card }),
       })
     )

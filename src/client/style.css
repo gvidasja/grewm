@@ -18,6 +18,11 @@ body > *:not(:first-child) {
   margin: 4px;
 }
 
+#cards .card:disabled {
+  border-color: rgb(69, 160, 212);
+  background: rgb(115, 194, 240);
+}
+
 html,
 body,
 input,
