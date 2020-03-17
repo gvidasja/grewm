@@ -74,6 +74,11 @@ input:focus {
   background: rgb(8, 104, 160);
 }
 
+.user .estimate.spectating {
+  color: rgb(131, 131, 131);
+  background: rgb(153, 163, 168);
+}
+
 button {
   border: 1px solid #ccc;
   background: #eee;

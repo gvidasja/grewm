@@ -34,15 +34,31 @@ function renderAll(users = [], { answered = {}, answers = {} } = {}) {
       E('div', { class: 'user' }, [
         E('span', { text: userText(user) }),
         E('span', {
-          class: ['estimate', answered[user.id] ? 'ready' : 'waiting'],
-          text: answers[user.id] || (answered[user.id] ? 'READY' : 'WAITING'),
+          class: [
+            'estimate',
+            user.spectate ? 'spectating' : answered[user.id] ? 'ready' : 'waiting',
+          ],
+          text: user.spectate
+            ? 'SPECTATING'
+            : answers[user.id] || (answered[user.id] ? 'READY' : 'WAITING'),
         }),
-        user.id === socket.id
-          ? Button({
-              text: 'Change name',
-              onClick: () => register(true),
-            })
-          : '',
+        ...(user.id === socket.id
+          ? [
+              Button({
+                text: 'Change name',
+                onClick: () => register(true),
+              }),
+              user.spectate
+                ? Button({
+                    text: 'Participate',
+                    onClick: () => register(false, false),
+                  })
+                : Button({
+                    text: 'Spectate',
+                    onClick: () => register(false, true),
+                  }),
+            ]
+          : []),
       ])
     )
   )
@@ -53,7 +69,9 @@ function renderAll(users = [], { answered = {}, answers = {} } = {}) {
       E('button', {
         class: 'card',
         text: card,
-        disabled: users.every(user => session && session.answered[user.id]),
+        disabled:
+          (users && users.find(user => user.id === socket.id).spectate) ||
+          (session && session.allAnswered),
         onClick: e => socket.emit('estimate', { estimate: card }),
       })
     )
@@ -64,10 +82,11 @@ function userText(user) {
   return (user.master ? '[M] ' : '') + user.name
 }
 
-function register(force) {
-  const name = force
+function register(newName, spectate = localStorage.getItem('spectate') === 'true') {
+  const name = newName
     ? prompt('Enter name') || ''
     : localStorage.getItem('name') || prompt('Enter name') || ''
   name && localStorage.setItem('name', name)
-  socket.emit('join', { name })
+  localStorage.setItem('spectate', spectate || false)
+  socket.emit('join', { name, spectate })
 }

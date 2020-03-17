@@ -20,8 +20,8 @@ app
   .use('/', express.static(path.resolve(__dirname, 'client')))
 
 io.on('connection', socket => {
-  socket.on('join', ({ name }) => {
-    updateUsers([...users.filter(user => user.id !== socket.id), { id: socket.id, name }])
+  socket.on('join', ({ name, spectate = false }) => {
+    updateUsers([...users.filter(user => user.id !== socket.id), { id: socket.id, name, spectate }])
     updateSession(session)
   })
   socket.on('disconnect', () => updateUsers(users.filter(x => x.id !== socket.id)))
@@ -46,9 +46,11 @@ function updateUsers(newUsers) {
 function updateSession({ answers = {}, answered = {} } = { answers: {}, answered: {} }) {
   session = { answers, answered }
 
-  const sessionToSend = users.every(user => session.answered[user.id])
-    ? session
-    : { answered: session.answered }
+  const allAnswered = users.every(user => user.spectate || session.answered[user.id])
+
+  const sessionToSend = allAnswered
+    ? { allAnswered, ...session }
+    : { allAnswered, answered: session.answered }
 
   io.emit('session', sessionToSend)
 }
