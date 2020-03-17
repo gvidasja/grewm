@@ -11,7 +11,6 @@ const io = socketIo(server)
 
 let users = []
 let session = {
-  task: null,
   answers: {},
   answered: {},
 }
@@ -30,7 +29,7 @@ io.on('connection', socket => {
     updateUsers(users.map(user => (user.id === socket.id ? { ...user, master: true } : user)))
     updateSession()
   })
-  socket.on('task', ({ task }) => updateSession({ task }))
+  socket.on('reset', () => updateSession())
   socket.on('estimate', ({ estimate }) =>
     updateSession({
       ...session,
@@ -44,14 +43,12 @@ function updateUsers(newUsers) {
   io.emit('users', (users = newUsers))
 }
 
-function updateSession(
-  { task, answers = {}, answered = {} } = { task: null, answers: {}, answered: {} }
-) {
-  session = { task, answers, answered }
+function updateSession({ answers = {}, answered = {} } = { answers: {}, answered: {} }) {
+  session = { answers, answered }
 
   const sessionToSend = users.every(user => session.answered[user.id])
     ? session
-    : { task: session.task, answered: session.answered }
+    : { answered: session.answered }
 
   io.emit('session', sessionToSend)
 }

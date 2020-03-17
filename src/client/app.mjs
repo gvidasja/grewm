@@ -1,5 +1,5 @@
 import { render, E } from './dom.mjs'
-import { Form, Input, Button } from './components.mjs'
+import { Button } from './components.mjs'
 
 const socket = io()
 
@@ -12,27 +12,19 @@ socket.on('session', newSession => renderAll(users, (session = newSession)))
 
 const cards = [0, 0.5, 1, 2, 3, 5, 8, 13, 20, 40, 100, 'INF', '?'].map(String)
 
-function updateTask(task) {
-  socket.emit('task', { task })
+function reset() {
+  socket.emit('reset')
 }
 
-function renderAll(users = [], { task, answered = {}, answers = {} } = {}) {
-  const $task = document.getElementById('task')
+function renderAll(users = [], { answered = {}, answers = {} } = {}) {
+  const $controls = document.getElementById('controls')
   const $users = document.getElementById('users')
   const $cards = document.getElementById('cards')
 
-  render($task, [
-    Form({ onSubmit: _ => updateTask(document.getElementById('task-input').value) }, [
-      Input({
-        autofocus: true,
-        id: 'task-input',
-        value: task,
-        placeholder: 'Enter task...',
-      }),
-    ]),
+  render($controls, [
     Button({
       text: 'Reset',
-      onClick: () => updateTask(),
+      onClick: () => reset(),
     }),
   ])
 
