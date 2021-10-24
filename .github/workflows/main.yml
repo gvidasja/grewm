@@ -22,8 +22,8 @@ jobs:
           docker login -u gvidelio -p ${{ secrets.DOCKER_PASSWORD }} && \
           docker buildx build \
             --cache-from gvidelio/grewm:latest \
-            --platform linux/arm/v7 \
+            --platform linux/arm/v7,linux/arm64 \
             --tag "gvidelio/grewm:latest" \
             --push \
-            --file ./arm32v7.Dockerfile . && \
+            --file ./Dockerfile . && \
           docker logout
